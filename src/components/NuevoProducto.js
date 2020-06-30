@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { crearNuevoProductoAction } from '../actions/productoActions';
-import { mostrarAlerta } from '../actions/alertaActions';
+import { mostrarAlerta, ocultarAlertaAction } from '../actions/alertaActions';
 
 const NuevoProducto = ({history}) => {
 
@@ -30,8 +30,10 @@ const NuevoProducto = ({history}) => {
         classes: 'alert alert-danger text-center text-uppercase p3'
       }
       dispatch(mostrarAlerta(alerta));
+      return;
     };
     // Control de errores
+    dispatch(ocultarAlertaAction());
 
     // Crear producto
     agregarProducto({
