@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { editarProductoAction } from "../actions/productoActions";
+import { useHistory } from "react-router-dom";
 
 const EditarProducto = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [producto, guardarProducto] = useState({
     nombre: "",
     precio: "",
@@ -10,16 +13,25 @@ const EditarProducto = () => {
 
   const productoEditar = useSelector((state) => state.productos.productoEditar);
   // if (!producto) return null;
-  const { nombre, precio, id } = producto;
+  const { nombre, precio} = producto;
 
   const submitEditarProducto = (e) => {
     e.preventDefault();
-    editarProductoAction();
+    dispatch(editarProductoAction(producto));
+    history.push('/');
   };
 
   useEffect(() => {
     guardarProducto(productoEditar);
   }, [productoEditar]);
+
+  // Leer los datos del formulario
+  const onChangeFormulario = (e) => {
+    guardarProducto({
+      ...producto,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   return (
     <div className="row justify-content-center">
@@ -38,6 +50,7 @@ const EditarProducto = () => {
                   placeholder="Nombre del producto"
                   name="nombre"
                   value={nombre}
+                  onChange={onChangeFormulario}
                 />
               </div>
               <div className="form-group">
@@ -48,6 +61,7 @@ const EditarProducto = () => {
                   placeholder="Precio del producto"
                   name="precio"
                   value={precio}
+                  onChange={onChangeFormulario}
                 />
               </div>
               <button
